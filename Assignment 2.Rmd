@@ -113,23 +113,68 @@ freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfa
 ```{r}
 
 # Is there an association between a citizen's living condition and their perception of civil servant corruption? Q4B -- present living, Q38C corruption of civil servant
-
+# Living Condition Explainatory
+# Curruption Reponse
 # Table to show proportion of living conditions in each corruption variable
 living_corruption_table <- table(cleanData$Q38C, cleanData$Q4B)
 
 living_corruption_table_colProp <-prop.table(living_corruption_table, 2) 
 round(living_corruption_table_colProp, 3)
 
+# Second Research
+#Is the perception of media freedom associated with citizens' satisfaction with democracy in #Ghana?
+# Satisfaction of democracy - response
+# Media freesom is expla
+media_democracy <- table(cleanData$Q31, cleanData$Q33H)
+
+media_democracy_colProp <-prop.table(media_democracy, 2) 
+round(media_democracy_colProp, 3)
+
 
 ```
 
 # SECTION 4:
 ```{r}
-barplot(living_corruption_table_colProp, cex.names= 0.6,ylim = c(0, 0.7),
-        xlab="Citizen's Living Condition",
-        ylab="Propotion of Citizen's Perception of Corruption of Cilvil Servant",
-        beside = TRUE
-        )
+colors1 <- c("#1F4529", "#47663B", "#E8ECD7", "#EED3B1")
+colors2 <- c("#181C14", "#FC8F54", "#697565", "#ECDFCC", "#AA5486")
+
+barplot(
+  living_corruption_table_colProp, 
+  beside = TRUE,                
+  cex.names = 0.6,
+  ylim = c(0, 0.8),
+  col = colors1,  
+  xlab = "Citizen's Living Condition", 
+  ylab = "Proportion of Citizen's Perception of Corruption of Civil Servants"
+)
+
+legend(
+  "top",   
+  legend = rownames(living_corruption_table_colProp),
+  fill = colors1,
+  title = "Perception Corruption Level",
+  cex = 0.6
+)
+
+
+barplot(
+  media_democracy_colProp, 
+  beside = TRUE,                
+  cex.names = 0.6,
+  ylim = c(0, 0.65),
+  col = colors2,  
+  xlab = "Perception of Freedom of Media", 
+  ylab = "Proportion of Satisfaction of Democracy"
+)
+
+legend(
+  "top",   
+  legend = rownames(media_democracy_colProp),
+  fill = colors2,
+  title = "Satisfaction of Democracy",
+  cex = 0.6
+)
+
 
 ```
 
