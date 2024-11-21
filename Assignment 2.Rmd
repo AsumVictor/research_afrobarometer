@@ -11,5 +11,88 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(descr)
+library(haven)
+GH_AFRO_9 <- read_sav("C:/Users/AiAsum/Downloads/afrobarometer_release-dataset_gha_r9_en_2023-04-01.sav")
+
+# Is there an association between a citizen's living condition and their perception of civil servant corruption?
+# Q4B -- present living, Q38C corruption of civil servant
+
+# Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?
+# Q33H -- media freedom, Q31- satisfaction
+
+# Is trust in neighbors associated with perceptions of safety walking in local communities?
+# Q86C trust in, Q7A safe in
+
+vars <- c("Q4B", "Q38C", "Q33H", "Q31", "Q86C", "Q7A") 
+cleanData <- GH_AFRO_9[vars]
+save(cleanData, file='PA2_Research.RDATA')
+
 ```
 
+# Error handling of Variables
+
+# First research questions
+### Coding and Error Handling for Q4B
+```{r}
+cleanData$Q4B <- as.character(cleanData$Q4B)
+
+cleanData$Q4B[cleanData$Q4B == "9" ] <- NA
+cleanData$Q4B[cleanData$Q4B == "-1" ] <- NA
+cleanData$Q4B[cleanData$Q4B == "8" ] <- NA
+
+cleanData$Q4B <- factor(cleanData$Q4B,
+                         levels = c("1", "2", "3", "4", "5"),
+                         labels = c("Very bad", "Fairly bad", "Neither good nor bad",
+                                    "Fairly good", "Very good"))
+
+freq(cleanData$Q4B)
+```
+
+### Coding and Error Handling for Q38C
+```{r}
+cleanData$Q38C <- as.character(cleanData$Q38C)
+cleanData$Q38C[cleanData$Q38C == "8"] <- NA
+cleanData$Q38C[cleanData$Q38C == "9"] <- NA
+cleanData$Q38C[cleanData$Q38C == "-1"] <- NA
+
+cleanData$Q38C <- factor(cleanData$Q38C,
+                         levels = c("0", "1", "2", "3"),
+                         labels = c("None", "Some of them", "Most of them", "All of them"))
+freq(cleanData$Q38C)
+
+```
+
+# Second research questions
+### Coding and Error Handling for Q33H
+```{r}
+cleanData$Q33H <- as.character(cleanData$Q33H)
+
+cleanData$Q33H[cleanData$Q33H == "8"] <- NA
+cleanData$Q33H[cleanData$Q33H == "9"] <- NA
+cleanData$Q33H[cleanData$Q33H == "-1"] <- NA
+
+cleanData$Q33H <- factor(cleanData$Q33H,
+                         levels = c("0", "1", "2", "3"),
+                         labels = c("Not at all free", "Not very free",
+                                    "Somewhat free", "Completely free"))
+
+freq(cleanData$Q33H)
+```
+
+### Coding and Error Handling for Q31
+```{r}
+cleanData$Q31 <- as.character(cleanData$Q31)
+
+cleanData$Q31[cleanData$Q31 == "8"] <- NA
+cleanData$Q31[cleanData$Q31 == "9"] <- NA
+cleanData$Q31[cleanData$Q31 == "-1"] <- NA
+
+cleanData$Q31 <- factor(cleanData$Q31,
+                        levels = c("0", "1", "2", "3", "4"),
+                        labels = c("Ghana is not a democracy", "Not at all satisfied", 
+                                   "Not very satisfied", "Fairly satisfied", 
+                                   "Very satisfied"))
+
+freq(cleanData$Q31)
+
+```
