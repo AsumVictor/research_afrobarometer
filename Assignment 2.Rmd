@@ -9,19 +9,23 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+*Is there an association between a citizen's living condition and their perception of civil servant corruption?*
+
+
+*Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?*
+
+
+# SECTION 1:
 ```{r}
 library(descr)
 library(haven)
 GH_AFRO_9 <- read_sav("C:/Users/AiAsum/Downloads/afrobarometer_release-dataset_gha_r9_en_2023-04-01.sav")
 
-# Is there an association between a citizen's living condition and their perception of civil servant corruption?
-# Q4B -- present living, Q38C corruption of civil servant
+```
 
-# Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?
-# Q33H -- media freedom, Q31- satisfaction
 
-# Is trust in neighbors associated with perceptions of safety walking in local communities?
-# Q86C trust in, Q7A safe in
+# Section 2: 
+```{r}
 
 vars <- c("Q4B", "Q38C", "Q33H", "Q31", "Q86C", "Q7A") 
 cleanData <- GH_AFRO_9[vars]
@@ -29,10 +33,9 @@ save(cleanData, file='PA2_Research.RDATA')
 
 ```
 
-# Error handling of Variables
 
-# First research questions
-### Coding and Error Handling for Q4B
+# Section three: Error handling of Variables 
+
 ```{r}
 cleanData$Q4B <- as.character(cleanData$Q4B)
 
@@ -45,11 +48,10 @@ cleanData$Q4B <- factor(cleanData$Q4B,
                          labels = c("Very bad", "Fairly bad", "Neither good nor bad",
                                     "Fairly good", "Very good"))
 
-freq(cleanData$Q4B)
-```
+
 
 ### Coding and Error Handling for Q38C
-```{r}
+
 cleanData$Q38C <- as.character(cleanData$Q38C)
 cleanData$Q38C[cleanData$Q38C == "8"] <- NA
 cleanData$Q38C[cleanData$Q38C == "9"] <- NA
@@ -58,13 +60,12 @@ cleanData$Q38C[cleanData$Q38C == "-1"] <- NA
 cleanData$Q38C <- factor(cleanData$Q38C,
                          levels = c("0", "1", "2", "3"),
                          labels = c("None", "Some of them", "Most of them", "All of them"))
-freq(cleanData$Q38C)
 
-```
+
 
 # Second research questions
 ### Coding and Error Handling for Q33H
-```{r}
+
 cleanData$Q33H <- as.character(cleanData$Q33H)
 
 cleanData$Q33H[cleanData$Q33H == "8"] <- NA
@@ -76,11 +77,8 @@ cleanData$Q33H <- factor(cleanData$Q33H,
                          labels = c("Not at all free", "Not very free",
                                     "Somewhat free", "Completely free"))
 
-freq(cleanData$Q33H)
-```
-
 ### Coding and Error Handling for Q31
-```{r}
+
 cleanData$Q31 <- as.character(cleanData$Q31)
 
 cleanData$Q31[cleanData$Q31 == "8"] <- NA
@@ -93,6 +91,45 @@ cleanData$Q31 <- factor(cleanData$Q31,
                                    "Not very satisfied", "Fairly satisfied", 
                                    "Very satisfied"))
 
-freq(cleanData$Q31)
+
+freq(cleanData$Q4B, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Living Condition")
+freq(cleanData$Q38C, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive Corruption")
+freq(cleanData$Q33H, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive of Media freedom")
+freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfaction of Democracy")
+
+
 
 ```
+
+
+# Section 4 - 
+```{r}
+
+```
+
+
+# Section 5
+
+```{r}
+
+# Is there an association between a citizen's living condition and their perception of civil servant corruption? Q4B -- present living, Q38C corruption of civil servant
+
+# Table to show proportion of living conditions in each corruption variable
+living_corruption_table <- table(cleanData$Q38C, cleanData$Q4B)
+
+living_corruption_table_colProp <-prop.table(living_corruption_table, 2) 
+round(living_corruption_table_colProp, 3)
+
+
+```
+
+# SECTION 4:
+```{r}
+barplot(living_corruption_table_colProp, cex.names= 0.6,ylim = c(0, 0.7),
+        xlab="Citizen's Living Condition",
+        ylab="Propotion of Citizen's Perception of Corruption of Cilvil Servant",
+        beside = TRUE
+        )
+
+```
+
