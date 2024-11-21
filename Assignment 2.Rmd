@@ -9,10 +9,18 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*Is there an association between a citizen's living condition and their perception of civil servant corruption?*
+**Is there an association between a citizen's living condition and their perception of civil servant corruption?**
+
+*Explainatory Variable*: Living Condition (Q4B)
+
+*Response Variable*: Perception of Corruption (Q38C)
 
 
-*Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?*
+**Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?**
+
+*Explainatory Variable*: Perception of Media Freedom (Q33H)
+
+*Response Variable*: Satisfaction of democracy (Q31)
 
 
 # SECTION 1:
@@ -27,14 +35,14 @@ GH_AFRO_9 <- read_sav("C:/Users/AiAsum/Downloads/afrobarometer_release-dataset_g
 # Section 2: 
 ```{r}
 
-vars <- c("Q4B", "Q38C", "Q33H", "Q31", "Q86C", "Q7A") 
+vars <- c("Q4B", "Q38C", "Q33H", "Q31") 
 cleanData <- GH_AFRO_9[vars]
 save(cleanData, file='PA2_Research.RDATA')
 
 ```
 
 
-# Section three: Error handling of Variables 
+# Section three: Error handling and Labeling variable response categories
 
 ```{r}
 cleanData$Q4B <- as.character(cleanData$Q4B)
@@ -48,10 +56,6 @@ cleanData$Q4B <- factor(cleanData$Q4B,
                          labels = c("Very bad", "Fairly bad", "Neither good nor bad",
                                     "Fairly good", "Very good"))
 
-
-
-### Coding and Error Handling for Q38C
-
 cleanData$Q38C <- as.character(cleanData$Q38C)
 cleanData$Q38C[cleanData$Q38C == "8"] <- NA
 cleanData$Q38C[cleanData$Q38C == "9"] <- NA
@@ -64,7 +68,6 @@ cleanData$Q38C <- factor(cleanData$Q38C,
 
 
 # Second research questions
-### Coding and Error Handling for Q33H
 
 cleanData$Q33H <- as.character(cleanData$Q33H)
 
@@ -77,7 +80,6 @@ cleanData$Q33H <- factor(cleanData$Q33H,
                          labels = c("Not at all free", "Not very free",
                                     "Somewhat free", "Completely free"))
 
-### Coding and Error Handling for Q31
 
 cleanData$Q31 <- as.character(cleanData$Q31)
 
@@ -112,19 +114,14 @@ freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfa
 
 ```{r}
 
-# Is there an association between a citizen's living condition and their perception of civil servant corruption? Q4B -- present living, Q38C corruption of civil servant
-# Living Condition Explainatory
-# Curruption Reponse
-# Table to show proportion of living conditions in each corruption variable
+# First Research
 living_corruption_table <- table(cleanData$Q38C, cleanData$Q4B)
 
 living_corruption_table_colProp <-prop.table(living_corruption_table, 2) 
 round(living_corruption_table_colProp, 3)
 
 # Second Research
-#Is the perception of media freedom associated with citizens' satisfaction with democracy in #Ghana?
-# Satisfaction of democracy - response
-# Media freesom is expla
+
 media_democracy <- table(cleanData$Q31, cleanData$Q33H)
 
 media_democracy_colProp <-prop.table(media_democracy, 2) 
@@ -156,7 +153,6 @@ legend(
   cex = 0.6
 )
 
-
 barplot(
   media_democracy_colProp, 
   beside = TRUE,                
@@ -177,4 +173,30 @@ legend(
 
 
 ```
+
+## Summary 
+
+### Living Condition - Perception of Corruption of Civil Servant
+1. Very few people think that no civil servants are involved in corruption. This opinion is consistent across all living conditions. The highest number of people who believe this (4.8%) comes from those who describe their living conditions as "Very Good." On the other hand, the lowest number (2.9%) comes from those who say their living conditions are "Fairly Bad."
+
+2. Most people think that some civil servants are corrupt. This is the most common opinion and the number of people who believe this increases as living conditions improve. For example, among those with "Very Bad" living conditions, 48.3% believe some civil servants are corrupt. This rises to 51.4% for "Fairly Bad," 56.6% for "Fairly Good," and 60.8% for "Very Good." This suggests that people with better living conditions tend to have a more moderate view of corruption.
+
+3. However, when we look at those who think most civil servants are corrupt, the opposite is true. People with poorer living conditions are more likely to believe this. For example, 29.7% of those with "Very Bad" living conditions hold this view, compared to only 24% of those with "Very Good" living conditions. This shows that as living conditions improve, fewer people think corruption is widespread among civil servants.
+
+4. Finally, there are those who believe that all civil servants are corrupt. This belief is most common among people with "Very Bad" living conditions, where 17.2% of respondents think this. As living conditions improve, fewer people hold this view. For example, only 10.4% of those with "Very Good" living conditions think that all civil servants are corrupt.
+
+I think poorer conditions tend to hold strong notions about the corruption of civil servants
+
+
+
+### Belive of Media Freedom - Satisfaction of Democracy
+1. The relationship between how free people think the media is and how satisfied they are with democracy in Ghana shows interesting patterns. When people feel the media is "Not at all free," they are the most not satisfied with democracy. About 41.3% of these individuals are "Not at all satisfied," and another 23.3% are "Not very satisfied." Only 19.3% of them feel "Very satisfied," which suggests that when people don’t think the media is free, they also have little satisfaction with democracy.
+
+2. For those who believe the media is "Not very free," the dissatisfaction levels are still high but slightly better. 22.7% are "Not at all satisfied," and 39.0% are "Not very satisfied." However, there is some improvement in satisfaction: 27.3% are "Fairly satisfied," and 11.0% are "Very satisfied." 
+
+3. When people think the media is "Somewhat free," their views on democracy become more balanced. Only 13.5% are "Not at all satisfied," and 34.2% are "Not very satisfied." Satisfaction rates are higher in this group, with 36.3% feeling "Fairly satisfied" and 15.6% "Very satisfied." 
+
+4. The highest satisfaction levels are among those who see the media as "Completely free." Very few of these individuals are dissatisfied, with 14.3% "Not at all satisfied" and 21.6% "Not very satisfied." On the other hand, 30.8% feel "Fairly satisfied," and an impressive 33.3% are "Very satisfied." 
+
+In summary, how free people think the media is seems closely connected to their satisfaction with democracy.
 
