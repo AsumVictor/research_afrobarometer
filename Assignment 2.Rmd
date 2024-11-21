@@ -1,0 +1,15 @@
+---
+title: "Assignment 2"
+author: "Victor Asum"
+date: "2024-11-21"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(descr)
+```
+
