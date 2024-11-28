@@ -9,11 +9,11 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Is there an association between a citizen's living condition and their perception of civil servant corruption?**
+**Does whether or not a respondent's answers were influenced by others impact the length of the interview?**
 
-*Explainatory Variable*: Living Condition (Q4B)
+*Explanatory Variable*: Influence by others (Q106B)
 
-*Response Variable*: Perception of Corruption (Q38C)
+*Response Variable*: Length of interview (LENGTH)
 
 
 **Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?**
@@ -132,7 +132,7 @@ round(media_democracy_colProp, 3)
 
 # SECTION 4:
 ```{r}
-colors1 <- c("#1F4529", "#47663B", "#E8ECD7", "#EED3B1")
+colors1 <- c("#AA5486", "#47663B", "#E8ECD7", "#EED3B1")
 colors2 <- c("#181C14", "#FC8F54", "#697565", "#ECDFCC", "#AA5486")
 
 barplot(
@@ -142,7 +142,7 @@ barplot(
   ylim = c(0, 0.8),
   col = colors1,  
   xlab = "Citizen's Living Condition", 
-  ylab = "Proportion of Citizen's Perception of Corruption of Civil Servants"
+  ylab = "Proportion of Citizen"
 )
 
 legend(
@@ -160,7 +160,7 @@ barplot(
   ylim = c(0, 0.65),
   col = colors2,  
   xlab = "Perception of Freedom of Media", 
-  ylab = "Proportion of Satisfaction of Democracy"
+  ylab = "Proportion of Citizens"
 )
 
 legend(
@@ -176,19 +176,6 @@ legend(
 
 ## Summary 
 
-### Living Condition - Perception of Corruption of Civil Servant
-1. Very few people think that no civil servants are involved in corruption. This opinion is consistent across all living conditions. The highest number of people who believe this (4.8%) comes from those who describe their living conditions as "Very Good." On the other hand, the lowest number (2.9%) comes from those who say their living conditions are "Fairly Bad."
-
-2. Most people think that some civil servants are corrupt. This is the most common opinion and the number of people who believe this increases as living conditions improve. For example, among those with "Very Bad" living conditions, 48.3% believe some civil servants are corrupt. This rises to 51.4% for "Fairly Bad," 56.6% for "Fairly Good," and 60.8% for "Very Good." This suggests that people with better living conditions tend to have a more moderate view of corruption.
-
-3. However, when we look at those who think most civil servants are corrupt, the opposite is true. People with poorer living conditions are more likely to believe this. For example, 29.7% of those with "Very Bad" living conditions hold this view, compared to only 24% of those with "Very Good" living conditions. This shows that as living conditions improve, fewer people think corruption is widespread among civil servants.
-
-4. Finally, there are those who believe that all civil servants are corrupt. This belief is most common among people with "Very Bad" living conditions, where 17.2% of respondents think this. As living conditions improve, fewer people hold this view. For example, only 10.4% of those with "Very Good" living conditions think that all civil servants are corrupt.
-
-I think poorer conditions tend to hold strong notions about the corruption of civil servants
-
-
-
 ### Belive of Media Freedom - Satisfaction of Democracy
 1. The relationship between how free people think the media is and how satisfied they are with democracy in Ghana shows interesting patterns. When people feel the media is "Not at all free," they are the most not satisfied with democracy. About 41.3% of these individuals are "Not at all satisfied," and another 23.3% are "Not very satisfied." Only 19.3% of them feel "Very satisfied," which suggests that when people don’t think the media is free, they also have little satisfaction with democracy.
 
@@ -199,4 +186,10 @@ I think poorer conditions tend to hold strong notions about the corruption of ci
 4. The highest satisfaction levels are among those who see the media as "Completely free." Very few of these individuals are dissatisfied, with 14.3% "Not at all satisfied" and 21.6% "Not very satisfied." On the other hand, 30.8% feel "Fairly satisfied," and an impressive 33.3% are "Very satisfied." 
 
 In summary, how free people think the media is seems closely connected to their satisfaction with democracy.
+
+
+### Living Condition - Perception of Corruption of Civil Servant
+1. Very few people think that no civil servants are involved in corruption. This opinion is consistent across all living conditions. The highest number of people who believe this (4.8%) comes from those who describe their living conditions as "Very Good." On the other hand, the lowest number (2.9%) comes from those who say their living conditions are "Fairly Bad." From the data, it seems people perception of democracy tend to have no pattern regardless of the living condition. But it seems majority of the people with very poor tend to have the perception that that all civil servant are corruption compare to other living condition. 
+
+
 
