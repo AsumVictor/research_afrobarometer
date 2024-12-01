@@ -9,18 +9,18 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Does whether or not a respondent's answers were influenced by others impact the length of the interview?**
-
-*Explanatory Variable*: Influence by others (Q106B)
-
-*Response Variable*: Length of interview (LENGTH)
-
-
 **Is the perception of media freedom associated with citizens' satisfaction with democracy in Ghana?**
 
 *Explainatory Variable*: Perception of Media Freedom (Q33H)
 
 *Response Variable*: Satisfaction of democracy (Q31)
+
+
+**Does primary langauge used in interview influence the length of the interview?**
+
+*Explanatory Variable*:  Language of interview (Q102)
+
+*Response Variable*: Length of interview (LENGTH)
 
 
 # SECTION 1:
@@ -33,99 +33,122 @@ GH_AFRO_9 <- read_sav("C:/Users/AiAsum/Downloads/afrobarometer_release-dataset_g
 
 
 # Section 2: 
+Sub
 ```{r}
-
-vars <- c("Q4B", "Q38C", "Q33H", "Q31") 
+vars <- c("Q33H", "Q31", "Q102", "LENGTH") 
 cleanData <- GH_AFRO_9[vars]
 save(cleanData, file='PA2_Research.RDATA')
 
 ```
 
 
-# Section three: Error handling and Labeling variable response categories
+# Section 2 b: Error handling and Labeling variable response categories
 
 ```{r}
-cleanData$Q4B <- as.character(cleanData$Q4B)
 
-cleanData$Q4B[cleanData$Q4B == "9" ] <- NA
-cleanData$Q4B[cleanData$Q4B == "-1" ] <- NA
-cleanData$Q4B[cleanData$Q4B == "8" ] <- NA
+# first research questions
 
-cleanData$Q4B <- factor(cleanData$Q4B,
-                         levels = c("1", "2", "3", "4", "5"),
-                         labels = c("Very bad", "Fairly bad", "Neither good nor bad",
-                                    "Fairly good", "Very good"))
-
-cleanData$Q38C <- as.character(cleanData$Q38C)
-cleanData$Q38C[cleanData$Q38C == "8"] <- NA
-cleanData$Q38C[cleanData$Q38C == "9"] <- NA
-cleanData$Q38C[cleanData$Q38C == "-1"] <- NA
-
-cleanData$Q38C <- factor(cleanData$Q38C,
-                         levels = c("0", "1", "2", "3"),
-                         labels = c("None", "Some of them", "Most of them", "All of them"))
-
-
-
-# Second research questions
-
+# Perception of Media Freedom (Q33H)
 cleanData$Q33H <- as.character(cleanData$Q33H)
 
 cleanData$Q33H[cleanData$Q33H == "8"] <- NA
 cleanData$Q33H[cleanData$Q33H == "9"] <- NA
 cleanData$Q33H[cleanData$Q33H == "-1"] <- NA
 
-cleanData$Q33H <- factor(cleanData$Q33H,
-                         levels = c("0", "1", "2", "3"),
-                         labels = c("Not at all free", "Not very free",
-                                    "Somewhat free", "Completely free"))
 
-
+# Satisfaction of democracy (Q31)
 cleanData$Q31 <- as.character(cleanData$Q31)
-
 cleanData$Q31[cleanData$Q31 == "8"] <- NA
 cleanData$Q31[cleanData$Q31 == "9"] <- NA
 cleanData$Q31[cleanData$Q31 == "-1"] <- NA
 
-cleanData$Q31 <- factor(cleanData$Q31,
-                        levels = c("0", "1", "2", "3", "4"),
-                        labels = c("Ghana is not a democracy", "Not at all satisfied", 
-                                   "Not very satisfied", "Fairly satisfied", 
-                                   "Very satisfied"))
 
 
-freq(cleanData$Q4B, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Living Condition")
-freq(cleanData$Q38C, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive Corruption")
+# Second research question
+# Language of interview (Q102)
+cleanData$Q102 <- as.character(cleanData$Q102)
+
+
+summary(cleanData$LENGTH)
+mean(cleanData$LENGTH, na.rm = TRUE)
+sd(cleanData$LENGTH, na.rm = TRUE)
+
+
+
+
 freq(cleanData$Q33H, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive of Media freedom")
 freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfaction of Democracy")
 
+freq(cleanData$Q102, cex.names=0.5, ylab = "Frequency", xlab = "Language used in interview")
+hist(cleanData$LENGTH, main="Histogram of interview length", xlab="interview length (minutes)", ylab="Frequency", col="#ff00ff")
+
+
+
+```
+
+
+# Section 3 - 
+```{r}
+# I'm Creating secondary variables for media and democracy
+# I choose to combine Not at all free", "Not very free", as one,"Somewhat free", "Completely free"
+cleanData$Q33H[cleanData$Q33H == "0"] <- "1"
+
+# I choose to combine Not at all free", "Not very free", as one,"Somewhat free", "Completely free"
+cleanData$Q31[cleanData$Q31 == "0"] <- "1"
+
+
+# Second Research:
+# Primary Language used for the research
+cleanData$Q102 <- as.character(cleanData$Q102)
+cleanData$Q102[cleanData$Q102 == "261"] <- "9995"
+cleanData$Q102[cleanData$Q102 == "262"] <- "9995"
+cleanData$Q102[cleanData$Q102 == "263"] <- "9995"
+cleanData$Q102[cleanData$Q102 == "264"] <- "9995"
+
+
+# Changing to understanable variables
+ cleanData$Q33H <- factor(cleanData$Q33H,
+                          levels = c("1", "2", "3"),
+                          labels = c("Not free", "Somewhat free", "Completely free")
+                          )
+
+ cleanData$Q31 <- factor(cleanData$Q31,
+                        levels = c("1", "2", "3", "4"),
+                        labels = c("Not at all satisfied", 
+                                    "Not very satisfied", "Fairly satisfied", 
+                                    "Very satisfied"))
+ 
+cleanData$Q102 <- factor(cleanData$Q102,
+                          levels = c("1", "260", "9995"),
+                          labels = c("English", "Twi", "Others"))
+
+freq(cleanData$Q33H, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive of Media freedom")
+freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfaction of Democracy")
+
+freq(cleanData$Q102, cex.names=0.5, ylab = "Frequency", xlab = "Language used in interview")
+hist(cleanData$LENGTH, main = "Histogram of interview length", xlab = "interview length (minutes)")
+
 
 
 ```
 
 
-# Section 4 - 
-```{r}
-
-```
-
-
-# Section 5
+# Section 4
 
 ```{r}
-
 # First Research
-living_corruption_table <- table(cleanData$Q38C, cleanData$Q4B)
 
-living_corruption_table_colProp <-prop.table(living_corruption_table, 2) 
-round(living_corruption_table_colProp, 3)
+mediaTable <- table(cleanData$Q31, cleanData$Q33H)
+mediaTable_colProp <-prop.table(mediaTable, 2)
+round(mediaTable_colProp, 3)
 
-# Second Research
 
-media_democracy <- table(cleanData$Q31, cleanData$Q33H)
+# Second research
+tapply(cleanData$LENGTH, cleanData$Q102, mean, na.rm = TRUE)
+tapply(cleanData$LENGTH, cleanData$Q102, sd, na.rm = TRUE) 
+tapply(cleanData$LENGTH, cleanData$Q102, length)
 
-media_democracy_colProp <-prop.table(media_democracy, 2) 
-round(media_democracy_colProp, 3)
+
 
 
 ```
@@ -133,63 +156,42 @@ round(media_democracy_colProp, 3)
 # SECTION 4:
 ```{r}
 colors1 <- c("#AA5486", "#47663B", "#E8ECD7", "#EED3B1")
-colors2 <- c("#181C14", "#FC8F54", "#697565", "#ECDFCC", "#AA5486")
+colors2 <- c("#181C14", "#FC8F54", "#697565","#AA5486")
 
 barplot(
-  living_corruption_table_colProp, 
+  mediaTable_colProp, 
   beside = TRUE,                
   cex.names = 0.6,
-  ylim = c(0, 0.8),
-  col = colors1,  
-  xlab = "Citizen's Living Condition", 
+  ylim = c(0, 0.5),
+  col = colors2,  
+  xlab = "Perception of Media Freedom", 
   ylab = "Proportion of Citizen"
 )
 
 legend(
   "top",   
-  legend = rownames(living_corruption_table_colProp),
-  fill = colors1,
-  title = "Perception Corruption Level",
-  cex = 0.6
-)
-
-barplot(
-  media_democracy_colProp, 
-  beside = TRUE,                
-  cex.names = 0.6,
-  ylim = c(0, 0.65),
-  col = colors2,  
-  xlab = "Perception of Freedom of Media", 
-  ylab = "Proportion of Citizens"
-)
-
-legend(
-  "top",   
-  legend = rownames(media_democracy_colProp),
+  legend = rownames(mediaTable_colProp),
   fill = colors2,
-  title = "Satisfaction of Democracy",
+  title = "Level Satisifaction",
   cex = 0.6
+)
+
+
+# Box and whiaker plot
+boxplot(cleanData$LENGTH ~ factor(cleanData$Q102),
+        names = levels(factor(cleanData$Q102)),
+        main = "Distribution of Length of interview for each primary langauge",
+        xlab = "Primary language",
+        ylab = "Length",
+        ylim = c(0, max(cleanData$LENGTH, na.rm = TRUE) + 10),
+        col = "lightblue"
 )
 
 
 ```
 
 ## Summary 
-
-### Belive of Media Freedom - Satisfaction of Democracy
-1. The relationship between how free people think the media is and how satisfied they are with democracy in Ghana shows interesting patterns. When people feel the media is "Not at all free," they are the most not satisfied with democracy. About 41.3% of these individuals are "Not at all satisfied," and another 23.3% are "Not very satisfied." Only 19.3% of them feel "Very satisfied," which suggests that when people don’t think the media is free, they also have little satisfaction with democracy.
-
-2. For those who believe the media is "Not very free," the dissatisfaction levels are still high but slightly better. 22.7% are "Not at all satisfied," and 39.0% are "Not very satisfied." However, there is some improvement in satisfaction: 27.3% are "Fairly satisfied," and 11.0% are "Very satisfied." 
-
-3. When people think the media is "Somewhat free," their views on democracy become more balanced. Only 13.5% are "Not at all satisfied," and 34.2% are "Not very satisfied." Satisfaction rates are higher in this group, with 36.3% feeling "Fairly satisfied" and 15.6% "Very satisfied." 
-
-4. The highest satisfaction levels are among those who see the media as "Completely free." Very few of these individuals are dissatisfied, with 14.3% "Not at all satisfied" and 21.6% "Not very satisfied." On the other hand, 30.8% feel "Fairly satisfied," and an impressive 33.3% are "Very satisfied." 
-
-In summary, how free people think the media is seems closely connected to their satisfaction with democracy.
-
-
-### Living Condition - Perception of Corruption of Civil Servant
-1. Very few people think that no civil servants are involved in corruption. This opinion is consistent across all living conditions. The highest number of people who believe this (4.8%) comes from those who describe their living conditions as "Very Good." On the other hand, the lowest number (2.9%) comes from those who say their living conditions are "Fairly Bad." From the data, it seems people perception of democracy tend to have no pattern regardless of the living condition. But it seems majority of the people with very poor tend to have the perception that that all civil servant are corruption compare to other living condition. 
+ to have the perception that that all civil servant are corruption compare to other living condition. 
 
 
 
