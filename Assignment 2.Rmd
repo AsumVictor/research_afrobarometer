@@ -180,7 +180,7 @@ legend(
 # Box and whiaker plot
 boxplot(cleanData$LENGTH ~ factor(cleanData$Q102),
         names = levels(factor(cleanData$Q102)),
-        main = "Distribution of Length of interview for each primary langauge",
+        main = "Distribution of Length of interview for each primary",
         xlab = "Primary language",
         ylab = "Length",
         ylim = c(0, max(cleanData$LENGTH, na.rm = TRUE) + 10),
@@ -191,7 +191,7 @@ boxplot(cleanData$LENGTH ~ factor(cleanData$Q102),
 ```
 
 ## Summary 
- to have the perception that that all civil servant are corruption compare to other living condition. 
+Based on the summary and visualized data, there appears to be a significant relationship between the perception of media freedom and satisfaction with democracy in Ghana. Respondents who perceived the media as "Not free" demonstrated a higher proportion of dissatisfaction (e.g., around 36% reported "Not very satisfied") and a much lower proportion of satisfaction (e.g., approximately 13% reported being "Very satisfied").In contrast, as perceptions of media freedom increased (from "Somewhat free" to "Completely free"), satisfaction with democracy also increased. For instance, among those who viewed the media as "Completely free," about 33% reported being "Very satisfied," while dissatisfaction decreased to less than 13% for the "Not at all satisfied" category. With this trend I propose that as citizens perceive greater media freedom, their satisfaction with democracy tends to improve.
 
-
+Based on the summary and visualized data, interview lengths varied slightly across primary languages, with Twi showing the highest average (72.52 minutes), followed by English (71.19 minutes) and Others (68.81 minutes). However, the "Others" category displayed significantly higher variability (SD = 43.81), compared to English (SD = 25.62) and Twi (SD = 25.22).While the majority of interviews were of similar duration, all categories exhibited outliers, particularly with longer interviews in the "Others" group. This variability may reflect differences in linguistic or contextual factors influencing interview length.
 
