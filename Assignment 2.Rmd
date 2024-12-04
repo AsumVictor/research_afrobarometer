@@ -1,5 +1,5 @@
 ---
-title: "Assignment 2"
+title: "Analysis on Afrobarometer round 9"
 author: "Victor Asum"
 date: "2024-11-21"
 output: word_document
@@ -142,12 +142,15 @@ mediaTable <- table(cleanData$Q31, cleanData$Q33H)
 mediaTable_colProp <-prop.table(mediaTable, 2)
 round(mediaTable_colProp, 3)
 
+table(cleanData$Q33H, useNA = "no")
+
 
 # Second research
 tapply(cleanData$LENGTH, cleanData$Q102, mean, na.rm = TRUE)
 tapply(cleanData$LENGTH, cleanData$Q102, sd, na.rm = TRUE) 
 tapply(cleanData$LENGTH, cleanData$Q102, length)
 
+table(cleanData$Q102, !is.na(cleanData$LENGTH))
 
 
 
@@ -205,6 +208,11 @@ Based on the summary and visualized data, interview lengths varied slightly acro
 
 # Alternative Hypothesis: There is an association between the perception of media freedom and citizens' satisfaction with democracy in Ghana.
 
+# Sample proportion
+sample_media <- table(cleanData$Q31, cleanData$Q33H)
+sample_prop_media <-prop.table(mediaTable, 2)
+round(sample_prop_media, 3)
+
 media_chisq_results <- chisq.test(cleanData$Q31, cleanData$Q33H)
 media_chisq_results 
 
@@ -221,6 +229,7 @@ mySubset_0_1 <- subset(cleanData, Q33H == "Not free" | Q33H == "Somewhat free")
 chisq_0_1 <- chisq.test(mySubset_0_1$Q31, mySubset_0_1$Q33H)
 print(chisq_0_1)
 
+
 # Subset for Not Free and Completely Free
 mySubset_0_2 <- subset(cleanData, Q33H == "Not free" | Q33H == "Completely free")
 chisq_0_2 <- chisq.test(mySubset_0_2$Q31, mySubset_0_2$Q33H)
@@ -234,8 +243,187 @@ print(chisq_1_2)
 
 # o avoid a Type I error (false positive)
 
+# END OF FIRST RESEARCH
+
+# SECOND RESEARCH
+
+# Null Hypothesis: The primary language used in the interview has no effect on the length of the interview.
+# H0: μ(English) =μ2(Twi) =μ3 (Others) 
 
 
+# Alternative hypothesis: The primary language used in the interview does influence the length of the interview.
+# H1 :At least one language group has a different mean interview length. 
+
+# Assumptions
+  # Independence
+  # Normality
+  # Homogeneity of Variance
+
+# Data summary:
+tapply(cleanData$LENGTH, cleanData$Q102, mean, na.rm = TRUE)
+tapply(cleanData$LENGTH, cleanData$Q102, sd, na.rm = TRUE) 
+tapply(cleanData$LENGTH, cleanData$Q102, length)
+
+table(cleanData$Q102, !is.na(cleanData$LENGTH))
+
+
+#Conduct ANOVA test
+anova_results <- aov(cleanData$LENGTH ~ cleanData$Q102, data = cleanData)
+summary(anova_results)
+
+#For p-value < 0.05 conduct a Post Hoc test
+TukeyHSD(anova_results)
 
 ```
+## STEPS FOR FIRST RESEARCH
+#### State Claim:
+First, I started by making a claim about the relationship between media freedom and satisfaction with democracy. I needed to state my hypotheses for this test formally.
+
+- My null hypothesis (H₀) was that there is no relationship between how people feel about media freedom and how satisfied they are with democracy. 
+- My alternative hypothesis (H₁) was that there is a relationship between perceptions of media freedom and satisfaction of democracy.
+
+#### Step 2: Collect and Summarize the Sample
+Next, I used R build functions, and then I calculated the proportions of people in each combination of satisfaction and media freedom categories and displayed them in a contingency table. For example:
+
+Not Free (media perception) and Not at All Satisfied (democracy satisfaction): 26.7%
+Somewhat Free and Fairly Satisfied: 36.3%
+Completely Free and Very Satisfied: 33.3%
+These proportions helped me understand how the groups were distributed.
+
+Counts for Each Category:
+I created a table to show how many people fell into each group: \n
+For example, 184 people said the media was "Not Free" and they were "Not at All Satisfied."
+230 people said the media was "Completely Free" and they were "Very Satisfied."
+
+Expected Counts:
+I calculated the expected counts for each cell in the table to compare them with the observed counts. 
+
+Sample Size:
+The total sample size was 2366 respondents, and there were no missing values, so I didn’t need to remove anything.
+
+#### Step 3: Assess the Evidence
+After summarizing the data, I ran a Chi-Square test to see if there was a relationship between media freedom and satisfaction with democracy. The test gave me the following results:
+
+Overall Test:
+X² = 176.38, df = 6, p-value < 2.2e-16 \n
+This means the result is highly significant because the p-value is way smaller than 0.05.
+
+Post-Hoc Analysis:
+Because there were three categories for media freedom (Not Free, Somewhat Free, and Completely Free), I did additional tests (pairwise comparisons) to find out which groups had the most significant differences.
+
+Not Free vs. Somewhat Free: X² = 53.57, p-value = 1.39e-11 \n
+Not Free vs. Completely Free: X² = 116.92, p-value < 2.2e-16 \n
+Somewhat Free vs. Completely Free: X² = 79.73, p-value < 2.2e-16 \n
+All these results showed that the differences between these groups were statistically significant.
+
+#### Step 4: Make a Conclusion
+From the test results, I could confidently say that the perception of media freedom is associated with people's satisfaction with democracy in Ghana because the p-values were statistically significant.
+
+Since the p-value was less than 0.05, I rejected the null hypothesis. This means that people’s views on whether the media is free or not are likely related to how satisfied they feel with democracy.
+
+Type of Error:
+If I made a mistake here, it would be a Type I error. This means I might have said there’s a relationship when there really isn’t one. That is why I needed to conduct the post-hoc analysis further.
+
+
+""
+
+## STEPS FOR SECOND RESEARCH
+#### Step 1: State the Claim
+My null hypothesis (H₀) was that the primary language used in the interview does not influence the length of the interview. In other words, the mean interview length is the same for all language groups (e.g., English, Twi, Others). 
+(H₀): u1 = u2 = u3, 
+Where u1 = mean of English language, 
+u2= mean of Twi, 
+u3= mean of Other languages
+
+My alternative hypothesis (H₁) was that the primary language used in the interview does influence the length of the interview. This means that at least one language group would have a different mean interview length compared to the others.
+
+#### Step 2: Collect and Summarize the Sample
+Next, I looked at the data to summarize the important details. Here’s what I found:
+
+Groups and Data:
+There were three language groups in my data: English, Twi, and Others. The dependent variable was the length of the interview, measured in minutes.
+
+Sample Sizes:
+The total number of interviews (sample size) was 2366. Each group had enough data to analyze properly.
+
+Summary Statistics:
+
+I calculated the mean interview lengths for each language group. I found that the mean of the times for English, Twi, and Others were **71.19472**, **72.52069**, and **68.81169**, respectively.
+From this, I could tell that the differences between the group means were minor (e.g., Twi was about 1.3 minutes longer than English on average). However, to validate, I needed to conduct an ANOVA test.
+
+
+
+Assumptions for ANOVA:
+
+Before running the ANOVA test, I checked the assumptions:
+Independence: Each interview was conducted separately, so this was satisfied.
+Normality: The interview lengths for each language group were approximately normally distributed from the box plot I did above.
+Homogeneity of Variance: I assumed the variances across the groups were similar enough for the test to work properly.
+
+
+#### Step 3: Assess the Evidence
+I used an ANOVA test to compare the average interview lengths across the three language groups. Here’s what the test results showed:
+
+Degrees of Freedom (Df):
+The between-groups degrees of freedom (for the language variable) was 2 because there were three groups (3-1 = 2).
+
+The residual degrees of freedom (for the within-group variation) was 2366, based on the total number of data points minus the number of groups.
+
+The sum of Squares (Sum Sq):
+The variation between the groups (language groups) was 3401.
+The variation within the groups (individual differences in interview lengths) was 1919225.
+
+Mean Squares (Mean Sq):
+The mean square for the groups was 1700.5 (3401 / 2).
+The mean square for the residuals was 811.2 (1919225 / 2366).
+
+F-Statistic and p-Value:
+The F-statistic was 2.096, and the p-value was 0.123.
+
+**Since the p-value was more significant than 0.05, I failed to reject the null hypothesis. This means there was no strong evidence that the primary language used in the interview affected the length of the interview**.
+
+
+
+Post-Hoc Analysis (Tukey’s Test):
+
+Even though the ANOVA test wasn’t significant, I ran a Tukey HSD test to look at the pairwise comparisons between the language groups to avoid type II errors. 
+
+
+**Twi vs. English**:
+The mean difference in interview length was 1.326 minutes, with a confidence interval of -1.617 to 4.269. The p-value was 0.5411, meaning the difference was not significant.
+
+**Others vs. English**:
+The mean difference was -2.383 minutes, with a confidence interval of -6.725 to 1.959. The p-value was 0.4025, meaning the difference was not significant.
+
+**Others vs. Twi**:
+The mean difference was -3.709 minutes, with a confidence interval of -8.042 to 0.624. The p-value was 0.1107, meaning the difference was also not significant.
+
+
+Type of Error:
+
+If I made a mistake here, it would be a Type II error. This means I might have missed a real difference between the language groups, even though the test didn’t find one.
+
+
+#### Step 4: Make a Conclusion
+Based on the results of the ANOVA test, I concluded that the primary language used in the interview does not significantly affect the length of the interview. In other words, the average interview lengths for English, Twi, and Others were not different enough to be considered statistically significant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
