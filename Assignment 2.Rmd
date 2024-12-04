@@ -195,3 +195,47 @@ Based on the summary and visualized data, there appears to be a significant rela
 
 Based on the summary and visualized data, interview lengths varied slightly across primary languages, with Twi showing the highest average (72.52 minutes), followed by English (71.19 minutes) and Others (68.81 minutes). However, the "Others" category displayed significantly higher variability (SD = 43.81), compared to English (SD = 25.62) and Twi (SD = 25.22).While the majority of interviews were of similar duration, all categories exhibited outliers, particularly with longer interviews in the "Others" group. This variability may reflect differences in linguistic or contextual factors influencing interview length.
 
+
+# Section 7
+```{r}
+
+ # Testing for first research
+
+# Null Hypothesis: There is no association between the perception of media freedom and citizens' satisfaction with democracy in Ghana.
+
+# Alternative Hypothesis: There is an association between the perception of media freedom and citizens' satisfaction with democracy in Ghana.
+
+media_chisq_results <- chisq.test(cleanData$Q31, cleanData$Q33H)
+media_chisq_results 
+
+
+media_chisq_results$observed
+media_chisq_results$expected
+media_chisq_results$residuals
+
+# I think since the p value is < 0.05, I need to conduct a Post Hoc test
+
+# 1. Subset for Not Free and Somewhat Free
+mySubset_0_1 <- subset(cleanData, Q33H == "Not free" | Q33H == "Somewhat free")
+
+chisq_0_1 <- chisq.test(mySubset_0_1$Q31, mySubset_0_1$Q33H)
+print(chisq_0_1)
+
+# Subset for Not Free and Completely Free
+mySubset_0_2 <- subset(cleanData, Q33H == "Not free" | Q33H == "Completely free")
+chisq_0_2 <- chisq.test(mySubset_0_2$Q31, mySubset_0_2$Q33H)
+print(chisq_0_2)
+
+# Subset for Somewhat Free and Completely Free
+mySubset_1_2 <- subset(cleanData, Q33H == "Somewhat free" | Q33H == "Completely free")
+chisq_1_2 <- chisq.test(mySubset_1_2$Q31, mySubset_1_2$Q33H)
+print(chisq_1_2)
+
+
+# o avoid a Type I error (false positive)
+
+
+
+
+```
+
