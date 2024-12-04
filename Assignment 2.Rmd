@@ -1,7 +1,7 @@
 ---
 title: "Analysis on Afrobarometer round 9"
 author: "Victor Asum"
-date: "2024-11-21"
+date: "2024-12-03"
 output: word_document
 ---
 
@@ -213,6 +213,7 @@ sample_media <- table(cleanData$Q31, cleanData$Q33H)
 sample_prop_media <-prop.table(mediaTable, 2)
 round(sample_prop_media, 3)
 
+
 media_chisq_results <- chisq.test(cleanData$Q31, cleanData$Q33H)
 media_chisq_results 
 
@@ -277,130 +278,176 @@ TukeyHSD(anova_results)
 ```
 ## STEPS FOR FIRST RESEARCH
 #### State Claim:
-First, I started by making a claim about the relationship between media freedom and satisfaction with democracy. I needed to state my hypotheses for this test formally.
+First, I started by making a claim about the relationship between media freedom and satisfaction with democracy.
 
 - My null hypothesis (H₀) was that there is no relationship between how people feel about media freedom and how satisfied they are with democracy. 
+
 - My alternative hypothesis (H₁) was that there is a relationship between perceptions of media freedom and satisfaction of democracy.
+
 
 #### Step 2: Collect and Summarize the Sample
 Next, I used R build functions, and then I calculated the proportions of people in each combination of satisfaction and media freedom categories and displayed them in a contingency table. For example:
 
-Not Free (media perception) and Not at All Satisfied (democracy satisfaction): 26.7%
-Somewhat Free and Fairly Satisfied: 36.3%
-Completely Free and Very Satisfied: 33.3%
+- Not Free (media perception) and Not at All Satisfied (democracy satisfaction): 26.7%
+
+- Somewhat Free and Fairly Satisfied: 36.3%
+
+- Completely Free and Very Satisfied: 33.3%
+
 These proportions helped me understand how the groups were distributed.
 
-Counts for Each Category:
-I created a table to show how many people fell into each group: \n
+
+##### Counts for Each Category:
+I created a table to show how many people fell into each group: 
+
 For example, 184 people said the media was "Not Free" and they were "Not at All Satisfied."
 230 people said the media was "Completely Free" and they were "Very Satisfied."
 
-Expected Counts:
+##### Expected Counts:
 I calculated the expected counts for each cell in the table to compare them with the observed counts. 
 
-Sample Size:
-The total sample size was 2366 respondents, and there were no missing values, so I didn’t need to remove anything.
+##### Sample Size:
+The total sample size was 2366 respondents, and I excluded missing values during this calculations
 
 #### Step 3: Assess the Evidence
 After summarizing the data, I ran a Chi-Square test to see if there was a relationship between media freedom and satisfaction with democracy. The test gave me the following results:
 
+
 Overall Test:
-X² = 176.38, df = 6, p-value < 2.2e-16 \n
+
+- X² = 176.38, 
+
+- df = 6, 
+
+- p-value < 2.2e-16
+
 This means the result is highly significant because the p-value is way smaller than 0.05.
 
-Post-Hoc Analysis:
+##### Post-Hoc Analysis:
 Because there were three categories for media freedom (Not Free, Somewhat Free, and Completely Free), I did additional tests (pairwise comparisons) to find out which groups had the most significant differences.
 
-Not Free vs. Somewhat Free: X² = 53.57, p-value = 1.39e-11 \n
-Not Free vs. Completely Free: X² = 116.92, p-value < 2.2e-16 \n
-Somewhat Free vs. Completely Free: X² = 79.73, p-value < 2.2e-16 \n
+- Not Free vs. Somewhat Free:  X² = 53.57, df = 3, p-value = 1.39e-11 \n
+
+- Not Free vs. Completely Free:  X² = 116.92, df = 3, p-value < 2.2e-16 \n
+
+- Somewhat Free vs. Completely Free:  X² = 79.73, df = 3, p-value < 2.2e-16 \n
+
 All these results showed that the differences between these groups were statistically significant.
+
 
 #### Step 4: Make a Conclusion
 From the test results, I could confidently say that the perception of media freedom is associated with people's satisfaction with democracy in Ghana because the p-values were statistically significant.
 
 Since the p-value was less than 0.05, I rejected the null hypothesis. This means that people’s views on whether the media is free or not are likely related to how satisfied they feel with democracy.
 
-Type of Error:
+##### Type of Error:
 If I made a mistake here, it would be a Type I error. This means I might have said there’s a relationship when there really isn’t one. That is why I needed to conduct the post-hoc analysis further.
 
 
-""
+
 
 ## STEPS FOR SECOND RESEARCH
 #### Step 1: State the Claim
-My null hypothesis (H₀) was that the primary language used in the interview does not influence the length of the interview. In other words, the mean interview length is the same for all language groups (e.g., English, Twi, Others). 
+- My null hypothesis (H₀) was that the primary language used in the interview does not influence the length of the interview. In other words, the mean interview length is the same for all language groups (e.g., English, Twi, Others). 
 (H₀): u1 = u2 = u3, 
-Where u1 = mean of English language, 
+Where:
+
+u1 = mean of English language,
+
 u2= mean of Twi, 
+
 u3= mean of Other languages
 
-My alternative hypothesis (H₁) was that the primary language used in the interview does influence the length of the interview. This means that at least one language group would have a different mean interview length compared to the others.
+- My alternative hypothesis (H₁) was that the primary language used in the interview does influence the length of the interview. This means that at least one language group would have a different mean interview length compared to the others.
 
 #### Step 2: Collect and Summarize the Sample
 Next, I looked at the data to summarize the important details. Here’s what I found:
 
-Groups and Data:
+
+##### Groups and Data:
 There were three language groups in my data: English, Twi, and Others. The dependent variable was the length of the interview, measured in minutes.
 
-Sample Sizes:
+##### Sample Sizes:
 The total number of interviews (sample size) was 2366. Each group had enough data to analyze properly.
 
-Summary Statistics:
+
+##### Summary Statistics:
 
 I calculated the mean interview lengths for each language group. I found that the mean of the times for English, Twi, and Others were **71.19472**, **72.52069**, and **68.81169**, respectively.
+
 From this, I could tell that the differences between the group means were minor (e.g., Twi was about 1.3 minutes longer than English on average). However, to validate, I needed to conduct an ANOVA test.
 
 
 
 Assumptions for ANOVA:
 
-Before running the ANOVA test, I checked the assumptions:
-Independence: Each interview was conducted separately, so this was satisfied.
-Normality: The interview lengths for each language group were approximately normally distributed from the box plot I did above.
-Homogeneity of Variance: I assumed the variances across the groups were similar enough for the test to work properly.
+- Independence: Each interview was conducted separately, so this was satisfied.
+
+- Normality: The interview lengths for each language group were approximately normally distributed from the box plot I did above.
+
+- Homogeneity of Variance: I assumed the variances across the groups were similar enough for the test to work properly.
 
 
 #### Step 3: Assess the Evidence
 I used an ANOVA test to compare the average interview lengths across the three language groups. Here’s what the test results showed:
 
-Degrees of Freedom (Df):
+##### Degrees of Freedom (Df):
 The between-groups degrees of freedom (for the language variable) was 2 because there were three groups (3-1 = 2).
 
 The residual degrees of freedom (for the within-group variation) was 2366, based on the total number of data points minus the number of groups.
 
-The sum of Squares (Sum Sq):
-The variation between the groups (language groups) was 3401.
-The variation within the groups (individual differences in interview lengths) was 1919225.
+##### The sum of Squares (Sum Sq):
+- The variation between the groups (language groups) was 3401.
 
-Mean Squares (Mean Sq):
-The mean square for the groups was 1700.5 (3401 / 2).
-The mean square for the residuals was 811.2 (1919225 / 2366).
+- The variation within the groups (individual differences in interview lengths) was 1919225.
 
-F-Statistic and p-Value:
-The F-statistic was 2.096, and the p-value was 0.123.
+
+##### Mean Squares (Mean Sq):
+
+- The mean square for the groups was 1700.5 (3401 / 2).
+
+- The mean square for the residuals was 811.2 (1919225 / 2366).
+
+
+
+##### F-Statistic and p-Value:
+
+- The F-statistic was 2.096, 
+
+- p-value was 0.123.
+
+
 
 **Since the p-value was more significant than 0.05, I failed to reject the null hypothesis. This means there was no strong evidence that the primary language used in the interview affected the length of the interview**.
 
 
-
-Post-Hoc Analysis (Tukey’s Test):
+#### Post-Hoc Analysis (Tukey’s Test):
 
 Even though the ANOVA test wasn’t significant, I ran a Tukey HSD test to look at the pairwise comparisons between the language groups to avoid type II errors. 
 
 
 **Twi vs. English**:
-The mean difference in interview length was 1.326 minutes, with a confidence interval of -1.617 to 4.269. The p-value was 0.5411, meaning the difference was not significant.
+
+- The mean difference in interview length was 1.326 minutes, with a confidence interval of -1.617 to 4.269. 
+
+- The p-value was 0.5411, meaning the difference was not significant.
+
 
 **Others vs. English**:
-The mean difference was -2.383 minutes, with a confidence interval of -6.725 to 1.959. The p-value was 0.4025, meaning the difference was not significant.
+
+- The mean difference was -2.383 minutes, with a confidence interval of -6.725 to 1.959. 
+
+- The p-value was 0.4025, meaning the difference was not significant.
+
 
 **Others vs. Twi**:
-The mean difference was -3.709 minutes, with a confidence interval of -8.042 to 0.624. The p-value was 0.1107, meaning the difference was also not significant.
+
+- The mean difference was -3.709 minutes, with a confidence interval of -8.042 to 0.624. 
+
+- The p-value was 0.1107, meaning the difference was also not significant.
 
 
-Type of Error:
-
+##### Type of Error:
 If I made a mistake here, it would be a Type II error. This means I might have missed a real difference between the language groups, even though the test didn’t find one.
 
 
@@ -408,6 +455,116 @@ If I made a mistake here, it would be a Type II error. This means I might have m
 Based on the results of the ANOVA test, I concluded that the primary language used in the interview does not significantly affect the length of the interview. In other words, the average interview lengths for English, Twi, and Others were not different enough to be considered statistically significant.
 
 
+
+# FINAL CONCLUSION:
+
+### Research 1: Is Perception of Media Freedom Associated with Satisfaction with Democracy?
+
+
+I used a Chi-Square test to see if people’s views about media freedom (Not Free, Somewhat Free, Completely Free) were connected to how satisfied they were with democracy (Not Satisfied, Fairly Satisfied, Very Satisfied). The test showed a strong connection between the two.
+
+#### Chi-Square Statistic: 
+
+- 𝑋-Square =176.38
+
+- Degrees of Freedom: 6
+
+- p-value: < 2.2e-16
+
+
+
+Since the p-value is much smaller than 0.05, I rejected the null hypothesis. This means there is a significant relationship between media freedom and satisfaction with democracy.
+
+#### Pairwise Comparisons (Post-Hoc Tests):
+
+I looked closer at specific group differences and found significant differences in all comparisons:
+
+
+**Not Free vs. Somewhat Free:** 
+
+- X-Square = 53.57
+
+- p < 1.39e−11
+
+
+**Not Free vs. Completely Free:** 
+
+- 𝑋-Square = 116.92, 
+
+- p<2.2e−16
+
+
+**Somewhat Free vs. Completely Free:** 
+
+- X-Square = 79.73, 
+
+- p < 2.2e−16
+
+
+For example, 33.3% of people who thought the media was "Completely Free" were "Very Satisfied" with democracy, compared to only 12.8% of those who thought the media was "Not Free." This shows a significant difference (20.5%) between these groups.
+
+
+#### What This Means:
+
+People who feel the media is free tend to be happier with democracy. This suggests that improving media freedom—like reducing censorship or making the media more transparent—could help boost satisfaction with democracy. The Government support to free media could strengthen democracy by increasing citizen satisfaction.
+
+This answer the research question that, Yes there is an association between perception of media freedom and democracy
+
+
+#### Study Limits:
+
+- Other factors, like political trust or the economy, could also influence satisfaction with democracy.
+
+- People might have different ideas about what "media freedom" means.
+
+
+
+
+### Research 2: Does Primary Language Used in the Interview Influence Interview Length?
+
+I used ANOVA to test if the language used in the interview (English, Twi, or Others) affected how long interviews lasted. The test showed no significant differences between the groups.
+
+
+- F-Statistic: 2.096
+ 
+- Degrees of Freedom: 2 (groups), 2366 (residuals)
+
+- p-value: 0.123
+
+
+Since the p-value is greater than 0.05, I failed to reject the null hypothesis. This means there is no evidence that the language used influences interview length.
+
+
+#### Pairwise Comparisons (Post-Hoc Tests):
+I also compared each pair of language groups, but none of the differences were statistically significant:
+
+
+**Twi vs. English:**
+ 
+- Mean difference = 1.33 minutes, 
+
+- p=0.541
+
+
+**Others vs. English:** 
+
+- Mean difference = -2.38 minutes, 
+
+- p = 0.403
+
+
+**Others vs. Twi:** 
+
+- Mean difference = -3.71 minutes, 
+
+- p = 0.111
+
+
+The differences in interview lengths were minor and not significant.
+
+#### What This Means:
+
+The language used during interviews does not seem to affect how long they take. This suggests that Afrobarometer’s survey process works well across different languages, keeping things consistent and fair. This can also suggest that researchers should always focus on the primary langauge the responsent are confident. 
 
 
 
