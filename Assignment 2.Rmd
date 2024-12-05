@@ -144,6 +144,9 @@ round(mediaTable_colProp, 3)
 
 table(cleanData$Q33H, useNA = "no")
 
+# removing outliers from the data
+cleanData$LENGTH[cleanData$LENGTH > 120] <- 0
+
 
 # Second research
 tapply(cleanData$LENGTH, cleanData$Q102, mean, na.rm = TRUE)
@@ -218,9 +221,9 @@ media_chisq_results <- chisq.test(cleanData$Q31, cleanData$Q33H)
 media_chisq_results 
 
 
-media_chisq_results$observed
+#media_chisq_results$observed
 media_chisq_results$expected
-media_chisq_results$residuals
+#media_chisq_results$residuals
 
 # I think since the p value is < 0.05, I need to conduct a Post Hoc test
 
