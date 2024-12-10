@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(descr)
 library(haven)
+library(car)
 GH_AFRO_9 <- read_sav("C:/Users/AiAsum/Downloads/afrobarometer_release-dataset_gha_r9_en_2023-04-01.sav")
 
 ```
@@ -80,7 +81,16 @@ freq(cleanData$Q33H, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Percei
 freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfaction of Democracy")
 
 freq(cleanData$Q102, cex.names=0.5, ylab = "Frequency", xlab = "Language used in interview")
-hist(cleanData$LENGTH, main="Histogram of interview length", xlab="interview length (minutes)", ylab="Frequency", col="#ff00ff")
+
+hist(cleanData$LENGTH, 
+     breaks = 20, 
+     main = "Figure 4.0: Distribution of Interview Lengths in Ghana", 
+     xlab = "Interview Length (in minutes)", 
+     ylab = "Frequency", 
+     col = "lightblue", 
+     border = "black", 
+     ylim = c(0, 1100),
+     xlim = c(0, 400))
 
 
 
@@ -122,12 +132,20 @@ cleanData$Q102 <- factor(cleanData$Q102,
                           levels = c("1", "260", "9995"),
                           labels = c("English", "Twi", "Others"))
 
-freq(cleanData$Q33H, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive of Media freedom")
-freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfaction of Democracy")
+# freq(cleanData$Q33H, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Perceive of Media freedom")
+# freq(cleanData$Q31, cex.names=0.5, ylab = "Frequency", xlab = "Citizen's Satisfaction of Democracy")
+# 
+# freq(cleanData$Q102, cex.names=0.5, ylab = "Frequency", xlab = "Language used in interview")
+# hist(cleanData$LENGTH, main = "Histogram of interview length", xlab = "interview length (minutes)")
 
-freq(cleanData$Q102, cex.names=0.5, ylab = "Frequency", xlab = "Language used in interview")
-hist(cleanData$LENGTH, main = "Histogram of interview length", xlab = "interview length (minutes)")
-
+# 
+ freq(cleanData$Q102, 
+     cex.names = 0.7,
+     ylab = "Frequency", 
+     xlab = "Primary Language Used in Interview", 
+     main = "Figure 5.0: Distribution of Primary Languages Used in Interviews", 
+     col = c("red", "lightgreen", "blue", "#ff00ff"), 
+     ylim = c(0, max(table(cleanData$Q102)) + 200))
 
 
 ```
@@ -145,7 +163,7 @@ round(mediaTable_colProp, 3)
 table(cleanData$Q33H, useNA = "no")
 
 # removing outliers from the data
-cleanData$LENGTH[cleanData$LENGTH > 120] <- 0
+cleanData$LENGTH[cleanData$LENGTH > 120] <- NA
 
 
 # Second research
@@ -164,32 +182,34 @@ table(cleanData$Q102, !is.na(cleanData$LENGTH))
 colors1 <- c("#AA5486", "#47663B", "#E8ECD7", "#EED3B1")
 colors2 <- c("#181C14", "#FC8F54", "#697565","#AA5486")
 
-barplot(
-  mediaTable_colProp, 
-  beside = TRUE,                
-  cex.names = 0.6,
-  ylim = c(0, 0.5),
-  col = colors2,  
-  xlab = "Perception of Media Freedom", 
-  ylab = "Proportion of Citizen"
-)
+# barplot(
+#   mediaTable_colProp, 
+#   beside = TRUE,                
+#   cex.names = 0.7,
+#   ylim = c(0, 0.5),
+#   col = colors2,  
+#   xlab = "Perception of Media Freedom", 
+#   ylab = "Proportion of Citizens",
+#   main = "Figure 3.0: Bivariate Distribution of Citizen's Satisfaction with Democracy Across Perceptions of Media Freedom",
+#   cex.main = 0.65
+# )
+# 
+# 
+# legend(
+#   "top",   
+#   legend = rownames(mediaTable_colProp),
+#   fill = colors2,
+#   title = "Level Satisifaction",
+#   cex = 0.6
+# )
 
-legend(
-  "top",   
-  legend = rownames(mediaTable_colProp),
-  fill = colors2,
-  title = "Level Satisifaction",
-  cex = 0.6
-)
 
-
-# Box and whiaker plot
 boxplot(cleanData$LENGTH ~ factor(cleanData$Q102),
         names = levels(factor(cleanData$Q102)),
-        main = "Distribution of Length of interview for each primary",
-        xlab = "Primary language",
-        ylab = "Length",
-        ylim = c(0, max(cleanData$LENGTH, na.rm = TRUE) + 10),
+        main = "Figure 6.0: Distribution of Interview Lengths by Primary Language",
+        xlab = "Primary Language",
+        ylab = "Interview Length (in minutes)",
+        ylim = c(25, max(cleanData$LENGTH, na.rm = TRUE) + 10),
         col = "lightblue"
 )
 
@@ -229,21 +249,26 @@ media_chisq_results$expected
 
 # 1. Subset for Not Free and Somewhat Free
 mySubset_0_1 <- subset(cleanData, Q33H == "Not free" | Q33H == "Somewhat free")
-
 chisq_0_1 <- chisq.test(mySubset_0_1$Q31, mySubset_0_1$Q33H)
-print(chisq_0_1)
 
 
 # Subset for Not Free and Completely Free
 mySubset_0_2 <- subset(cleanData, Q33H == "Not free" | Q33H == "Completely free")
 chisq_0_2 <- chisq.test(mySubset_0_2$Q31, mySubset_0_2$Q33H)
-print(chisq_0_2)
 
 # Subset for Somewhat Free and Completely Free
 mySubset_1_2 <- subset(cleanData, Q33H == "Somewhat free" | Q33H == "Completely free")
 chisq_1_2 <- chisq.test(mySubset_1_2$Q31, mySubset_1_2$Q33H)
-print(chisq_1_2)
 
+post_hoc_results <- data.frame(
+  Comparison = c("Not Free vs. Somewhat Free", "Not Free vs. Completely Free", "Somewhat Free vs. Completely Free"),
+  Chi_Square_Statistic = c(chisq_0_1$statistic, chisq_0_2$statistic, chisq_1_2$statistic),
+  Degrees_of_Freedom = c(chisq_0_1$parameter, chisq_0_2$parameter, chisq_1_2$parameter),
+  P_Value = c(chisq_0_1$p.value, chisq_0_2$p.value, chisq_1_2$p.value)
+)
+
+# Print the table
+# print(post_hoc_results)
 
 # o avoid a Type I error (false positive)
 
@@ -270,6 +295,28 @@ tapply(cleanData$LENGTH, cleanData$Q102, length)
 
 table(cleanData$Q102, !is.na(cleanData$LENGTH))
 
+# Testing for homogeneity of variance
+# leveneTest(cleanData$LENGTH ~ cleanData$Q102, data = cleanData)
+# leveneTest(cleanData$LENGTH ~ cleanData$Q102, data = cleanData, center = mean)
+
+# Normality test
+# shapiro.test(cleanData$LENGTH)
+hist(cleanData$LENGTH, 
+     breaks = 20, 
+     main = "Figure 4.1: Distribution of Interview Lengths in Ghana", 
+     xlab = "Interview Length (in minutes)", 
+     ylab = "Frequency", 
+     col = "lightblue", 
+     border = "black", 
+     ylim = c(0, 350),
+     xlim = c(20, 125))
+
+summary(cleanData$LENGTH)
+mean(cleanData$LENGTH, na.rm = TRUE)
+sd(cleanData$LENGTH, na.rm = TRUE)
+
+
+
 
 #Conduct ANOVA test
 anova_results <- aov(cleanData$LENGTH ~ cleanData$Q102, data = cleanData)
@@ -277,6 +324,7 @@ summary(anova_results)
 
 #For p-value < 0.05 conduct a Post Hoc test
 TukeyHSD(anova_results)
+
 
 ```
 ## STEPS FOR FIRST RESEARCH
